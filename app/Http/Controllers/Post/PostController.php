@@ -1,0 +1,13 @@
+<?php
+
+namespace App\Http\Controllers\Post;
+
+use App\Http\Controllers\Controller;
+
+class PostController extends Controller
+{
+    public function form()
+    {
+        return view('post.post-form');
+    }
+}
