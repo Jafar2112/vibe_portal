@@ -2,4 +2,5 @@
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\Post\PostController;
 
-Route::get('post-form',[PostController::class,'form']);
+Route::get('/create-post',[PostController::class,'create']);
+Route::post('/create-post',[PostController::class,'store']);

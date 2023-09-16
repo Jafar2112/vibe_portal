@@ -12,6 +12,9 @@ Route::post('form',function (\Illuminate\Http\Request $request){});
 Route::get('/l',function (){
    return view('login');
 });
+Route::get('/test',function (){
+   return view('test');
+});
 
 Route::middleware([
     'auth:sanctum',
