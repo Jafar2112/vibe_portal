@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('posts_related_vibe_categories', function (Blueprint $table) {
+        Schema::create('temporary_posts', function (Blueprint $table) {
             $table->id();
+            $table->string('user_id');
+            $table->string('title');
+            $table->longText('content');
             $table->timestamps();
         });
     }
@@ -22,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('posts_related_vibe_categories');
+        Schema::dropIfExists('temporary_posts');
     }
 };

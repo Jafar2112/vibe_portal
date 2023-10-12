@@ -2,19 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\PageController;
-use \App\Http\Controllers\VibeController;
-use \Illuminate\Support\Facades\Log;
+use \App\Http\Controllers\Post\PostController;
 
 Route::get('/', [PageController::class, 'home']);
-Route::get('/vibe-category',[VibeController::class,'category']);
-Route::get('/vibe-categories',[VibeController::class,'categories']);
-Route::post('form',function (\Illuminate\Http\Request $request){});
-Route::get('/l',function (){
-   return view('login');
-});
-Route::get('/test',function (){
-   return view('test');
-});
+Route::view('view','vibe.vibe');
+Route::get('/post/{id}',[PostController::class,'show']);
 
 Route::middleware([
     'auth:sanctum',

@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class VibeCategory extends Model
 {
     use HasFactory;
+    protected $table='vibe_categories';
+    protected $guarded=[];
+
+    public function post()
+    {
+        return $this->belongsToMany(Post::class,'posts_categories');
+    }
 }

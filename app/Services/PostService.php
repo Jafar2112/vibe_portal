@@ -3,45 +3,106 @@
 namespace App\Services;
 
 use App\Models\Post;
+use App\Models\PostCategory;
 use App\Models\PostImage;
+use App\Models\TemporaryImage;
+use App\Models\TemporaryPost;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class PostService
 {
-    public function store($request)
+    public function first_step_post($request, $id)
     {
         $data = $request->validate([
             'title' => 'required|max:255',
             'content' => 'required',
-
         ]);
-
-
-        $images = $request->input('selected_images');
-        DB::transaction(function () use ($data, $request,$images) {
-
-            Post::create([
+        //Todo change longtext to text
+        if ($id) {
+            $temporary_post = TemporaryPost::auth_user_and_id($id);
+            $temporary_post->update([
                 'title' => $data['title'],
                 'content' => $data['content'],
-                'user_id'=>1
             ]);
+            return $temporary_post->id;
+        }
+        $temporary_post = TemporaryPost::create([
+            'user_id' => Auth::id(),
+            'title' => $data['title'],
+            'content' => $data['content'],
+        ]);
+        return $temporary_post->id;
+    }
 
-            if ($images){
-                foreach ($images as $image) {
+    public function second_step_post($request, $id)
+    {
+        $request->validate([
+            'image' => 'mimes:png,jpg,jpeg',
+        ]);
 
-                    $imageName = rand(0, 1000000) . '_' . rand(0, 1000000) .
-                        '_' . rand(0, 1000000) . '_' . rand(0, 1000000) .
-                        '.' . $image->getClientOriginalExtension();
+        $image_name = rand(0, 100000) . '_' . rand(0, 100000) . '_' . rand(0, 100000)
+            . '_' . rand(0, 100000). '.'. $request->image->getClientOriginalExtension();
 
-                    $image->move(public_path('/images/post'), $imageName);
+        $request->image->move(public_path('/images/temporary_images'), $image_name);
+
+        TemporaryImage::create([
+            'image' => $image_name,
+            'post_id' => $id,
+        ]);
+
+    }
+
+    public function third_step_post($request, $id)
+    {
+        $temporary_post = TemporaryPost::auth_user_and_id($id);
+        $categories = $request->categories;
+        $temporary_images = TemporaryImage::where('post_id', $id)->get();
+        DB::transaction(function () use ($temporary_images, $temporary_post, $id, $request, $categories) {
+            $post = Post::create([
+                'user_id' => $temporary_post->user_id,
+                'title' => $temporary_post->title,
+                'content' => $temporary_post->content,
+            ]);
+            if ($temporary_images) {
+                foreach ($temporary_images as $image) {
                     PostImage::create([
-                        'image' => $imageName,
+                        'image' => $image->image,
+                        'post_id' => $post->id
+                    ]);
+                    if (File::exists(public_path('images/temporary_images/' . $image->image))) {
+                        File::move(public_path('images/temporary_images/' . $image->image),
+                            public_path('images/post/' . $image->image));
+                        File::delete(public_path('images/temporary_images/' . $image->image));
+
+                    }
+                }
+
+            }
+            if ($categories) {
+                foreach ($categories as $category) {
+                    PostCategory::create([
+                        'post_id' => $post->id,
+                        'category_id' => $category
                     ]);
                 }
             }
+
+            $temporary_post->delete();
+            TemporaryImage::where('post_id', $id)->delete();
         });
 
 
     }
+
+    public function delete_temporary_image($id)
+    {
+        $image = TemporaryImage::where(['id' => $id])->firstOrFail();
+        if (File::exists(public_path('/images/temporary_images/' . $image->image))) {
+            File::delete(public_path('/images/temporary_images/' . $image->image));
+        }
+        $image->delete();
+    }
+
 }

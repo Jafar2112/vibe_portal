@@ -36,6 +36,10 @@
 
 @section('content')
     <main role="main">
+        <?php
+        session_start();
+        $_SESSION['name']='Name';
+        ?>
 
 {{--        <div id="myCarousel" class="carousel slide" data-ride="carousel">--}}
 {{--            <ol class="carousel-indicators">--}}
