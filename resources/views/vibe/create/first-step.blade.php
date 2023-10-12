@@ -1,15 +1,13 @@
 @extends('layouts.main-layout')
 @section('head')
     <link rel="stylesheet" href="/css/post/create/title.css">
+
 @endsection
 @section('content')
     <div class="container">
         <div class="row">
-
             <div class="col-md-8 col-md-offset-2">
-
-
-                <h1>Create post</h1>
+                <h1>Create vibe category</h1>
                 @if ($errors->any())
                     <div class="alert alert-danger w-50 mx-auto">
                         <ul>
@@ -20,18 +18,19 @@
                     </div>
                 @endif
 
-                <form @if($id)action="{{route('post.create.first-step',$id)}}" @else action="{{route('post.create.first-step',$id)}}"@endif method="POST">
+                <form @if($id)action="{{route('vibe.category.create.first.step.post',$id)}}" @else action="{{route('vibe.category.create.first.step.post')}}" @endif method="POST">
                     @csrf
                     <div class="form-group">
-                        <label for="title">Title <span class="require">*</span></label>
-                        <input value="{{$temporary_post?$temporary_post->title:''}}" type="text" class="form-control" name="title"/>
+                        <label for="title">Name <span class="require">*</span></label>
+                        <input value="{{$temporary_category?$temporary_category->name:''}}" type="text"
+                               class="form-control" name="name"/>
                     </div>
 
                     <div class="form-group">
-                        <label for="description">Content <span class="require">*</span></label>
-                        <textarea rows="5" class="form-control" name="content">{{$temporary_post?$temporary_post->content:''}}</textarea>
+                        <label for="description">Description <span class="require">*</span></label>
+                        <textarea rows="5" class="form-control"
+                                  name="description">{{$temporary_category?$temporary_category->description:''}}</textarea>
                     </div>
-
 
 
                     <div class="form-group">

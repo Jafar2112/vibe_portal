@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('vibe_categories', function (Blueprint $table) {
+        Schema::create('vibe_categories_related_categories', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('description');
-            $table->bigInteger('user_id');
+            $table->bigInteger('main_category_id');
+            $table->bigInteger('related_category_id');
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('vibe_categories');
+        Schema::dropIfExists('vibe_categories_related_categories');
     }
 };

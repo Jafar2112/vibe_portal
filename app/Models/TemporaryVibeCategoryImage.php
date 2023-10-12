@@ -5,9 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class VibeCategoryRelatedCategory extends Model
+class TemporaryVibeCategoryImage extends Model
 {
     use HasFactory;
-    protected $table='vibe_categories_related_categories';
+    protected $table='temporary_vibe_categories_images';
     protected $guarded=[];
+
 }

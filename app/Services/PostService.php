@@ -7,6 +7,7 @@ use App\Models\PostCategory;
 use App\Models\PostImage;
 use App\Models\TemporaryImage;
 use App\Models\TemporaryPost;
+use App\Models\TemporaryVibeCategoryImage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -43,7 +44,7 @@ class PostService
         ]);
 
         $image_name = rand(0, 100000) . '_' . rand(0, 100000) . '_' . rand(0, 100000)
-            . '_' . rand(0, 100000). '.'. $request->image->getClientOriginalExtension();
+            . '_' . rand(0, 100000) . '.' . $request->image->getClientOriginalExtension();
 
         $request->image->move(public_path('/images/temporary_images'), $image_name);
 
@@ -59,7 +60,8 @@ class PostService
         $temporary_post = TemporaryPost::auth_user_and_id($id);
         $categories = $request->categories;
         $temporary_images = TemporaryImage::where('post_id', $id)->get();
-        DB::transaction(function () use ($temporary_images, $temporary_post, $id, $request, $categories) {
+        $post_id = null;
+        DB::transaction(function () use ($temporary_images, $temporary_post, $id, $request, $categories, &$post_id) {
             $post = Post::create([
                 'user_id' => $temporary_post->user_id,
                 'title' => $temporary_post->title,
@@ -91,18 +93,28 @@ class PostService
 
             $temporary_post->delete();
             TemporaryImage::where('post_id', $id)->delete();
+            $post_id = $post->id;
         });
-
-
+        return $post_id;
     }
 
-    public function delete_temporary_image($id)
+    public function delete_temporary_image($id, $type)
     {
-        $image = TemporaryImage::where(['id' => $id])->firstOrFail();
-        if (File::exists(public_path('/images/temporary_images/' . $image->image))) {
-            File::delete(public_path('/images/temporary_images/' . $image->image));
+        if ($type == 'post') {
+            $image = TemporaryImage::findOrFail($id);
+            if (File::exists(public_path('/images/temporary_images/' . $image->image))) {
+                File::delete(public_path('/images/temporary_images/' . $image->image));
+            }
+            $image->delete();
         }
-        $image->delete();
+        if ($type == 'vibe_category') {
+            $image = TemporaryVibeCategoryImage::findOrFail($id);
+            if (File::exists(public_path('/images/temporary_images/' . $image->image))) {
+                File::delete(public_path('/images/temporary_images/' . $image->image));
+            }
+            $image->delete();
+        }
+
     }
 
 }

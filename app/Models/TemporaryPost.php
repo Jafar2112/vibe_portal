@@ -16,4 +16,8 @@ class TemporaryPost extends Model
     {
         return TemporaryPost::where(['user_id'=>Auth::id(),'id'=>$id])->firstOrFail();
     }
+    public function images()
+    {
+        return $this->hasMany(TemporaryImage::class,'post_id','id');
+    }
 }

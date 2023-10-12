@@ -39,8 +39,8 @@ class PostCreate extends Controller
 
     public function second_step($id)
     {
-        TemporaryPost::auth_user_and_id($id);
-        $images = TemporaryImage::where(['post_id' => $id])->get();
+
+        $images = TemporaryPost::auth_user_and_id($id)->images;
         return view('post.create.second-step', compact('id',
             'images'));
     }
@@ -51,9 +51,9 @@ class PostCreate extends Controller
         return back();
     }
 
-    public function delete_temporary_image($id)
+    public function delete_temporary_image($id,$type)
     {
-        $this->postService->delete_temporary_image($id);
+        $this->postService->delete_temporary_image($id,$type);
         return response('success', 200);
     }
 
@@ -65,7 +65,8 @@ class PostCreate extends Controller
 
     public function third_step_post(Request $request, $id)
     {
-        $this->postService->third_step_post($request, $id);
+        $post_id=$this->postService->third_step_post($request, $id);
+        return redirect('/post/'.$post_id);
     }
 
     public function posts()

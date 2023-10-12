@@ -15,7 +15,7 @@
                 </ul>
             </div>
         @endif
-        <form id="upload-image" method="post" action="{{route('post.create.second-step',['id'=>$id])}}"
+        <form id="upload-image" method="post" action="{{route('vibe.category.create.second.step.post',['id'=>$id])}}"
               enctype="multipart/form-data">
             @csrf
             <input type="file" name="image" class="form-control" id="customFile"/>
@@ -32,7 +32,7 @@
             @endif
             <hr>
             <div class="form-group">
-                <a href="/create-post/first-step/{{$id}}">
+                <a href="/create-vibe-category/first-step/{{$id}}">
                     <button style="display: inline-block" type="button" class="btn btn-dark">Back</button>
                 </a>
 
@@ -42,7 +42,7 @@
                     </button>
                 </a>
 
-                <a href="{{route('post.create.third-step',['id'=>$id])}}">
+                <a href="/create-vibe-category/third-step/{{$id}}">
                     <button type="button" class="btn btn-success">
                         Next step
                     </button>
@@ -65,7 +65,7 @@
 
                 $.ajax({
                     type: 'DELETE',
-                    url: '/temporary-image/' + dataId + '/post',
+                    url: '/temporary-image/' + dataId+'vibe_category',
                     data: {
                         _token: csrfToken
                     },
