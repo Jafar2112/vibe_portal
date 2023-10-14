@@ -6,15 +6,7 @@
     <div class="container-sm">
         <h1 style="text-align: center;">Add photos</h1>
         <p style="text-align: center">You can add max 15 photos</p>
-        @if ($errors->any())
-            <div class="alert alert-danger w-50 mx-auto">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+        @include('includes.error-validations')
         <form id="upload-image" method="post" action="{{route('vibe.category.create.second.step.post',['id'=>$id])}}"
               enctype="multipart/form-data">
             @csrf

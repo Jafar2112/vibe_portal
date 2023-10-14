@@ -27,6 +27,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'about',
+        'profile_photo'
     ];
 
     /**
@@ -58,4 +60,12 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+    public function posts()
+    {
+        return $this->hasMany(Post::class,'user_id','id');
+    }
+    public function follower()
+    {
+        return $this->belongsToMany(User::class,'user_follow');
+    }
 }

@@ -58,31 +58,31 @@ class VibeCategoryService
         $categories = $request->categories;
         $temporary_category = TemporaryVibeCategory::auth_user_and_id($id);
         $images = TemporaryVibeCategoryImage::where('category_id', $id)->get();
-        $new_category_id=null;
+        $new_category_id = null;
 
-        DB::transaction(function () use($temporary_category,$images,$categories,&$new_category_id,$id){
-            $new_category=VibeCategory::create([
-                'name'=>$temporary_category->name,
-                'description'=>$temporary_category->description,
-                'user_id'=>$temporary_category->user_id,
+        DB::transaction(function () use ($temporary_category, $images, $categories, &$new_category_id, $id) {
+            $new_category = VibeCategory::create([
+                'name' => $temporary_category->name,
+                'description' => $temporary_category->description,
+                'user_id' => $temporary_category->user_id,
             ]);
-            if ($categories){
+            if ($categories) {
                 foreach ($categories as $category) {
                     VibeCategoryRelatedCategory::create([
                         'main_category_id' => $new_category->id,
-                        'related_category_id'=>$category,
+                        'related_category_id' => $category,
                     ]);
                 }
             }
-            if ($images){
-                foreach ($images as $image){
+            if ($images) {
+                foreach ($images as $image) {
                     VibeCategoryImages::create([
-                        'image'=>$image->image,
-                        'category_id'=>$new_category->id,
+                        'image' => $image->image,
+                        'category_id' => $new_category->id,
                     ]);
                     if (File::exists(public_path('images/temporary_images/' . $image->image))) {
                         File::move(public_path('images/temporary_images/' . $image->image),
-                            public_path('images/post/' . $image->image));
+                            public_path('images/vibe_category/' . $image->image));
                         File::delete(public_path('images/temporary_images/' . $image->image));
                     }
                 }

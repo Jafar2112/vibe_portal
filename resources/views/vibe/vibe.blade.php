@@ -1,114 +1,169 @@
 @extends('layouts.main-layout')
 @section('head')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/vibe/vibe.css">
 @stop
 @section('content')
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-lg-8">
-            <article>
-                <header class="mb-4">
-                    <h1 class="fw-bolder mb-1">Welcome to Blog Post!</h1>
-                    <div class="text-muted fst-italic mb-2">Posted on January 1, 2023 by Start Bootstrap</div>
-                    <a class="badge bg-secondary text-decoration-none link-light" href="#!">Web Design</a>
-                    <a class="badge bg-secondary text-decoration-none link-light" href="#!">Freebies</a>
-                </header>
-                <figure class="mb-4"><img class="img-fluid rounded" src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..." /></figure>
-                <!-- Post content-->
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-8">
+
+                <article>
+
+                    <h1 class="fw-bolder mb-1">{{$category->name}}</h1>
+                    @if($category->images->count()>1)
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div id="custCarousel" class="carousel slide" data-ride="carousel" align="center">
+                                        <!-- slides -->
+                                        <div class="carousel-inner">
+                                            @foreach($category->images as $key=>$image)
+                                                @if($key==0)
+                                                    <div class="carousel-item active">
+                                                @else()
+                                                     <div class="carousel-item">
+                                                @endif
+                                                        <img style="width:700px;height: 400px" src="/images/vibe_category/{{$image->image}}">
+                                                    </div>
+                                            @endforeach
+                                        </div>
+
+                                        <!-- Left right -->
+                                        <a class="carousel-control-prev" href="#custCarousel" data-slide="prev">
+                                            <span class="carousel-control-prev-icon"></span>
+                                        </a>
+                                        <a class="carousel-control-next" href="#custCarousel" data-slide="next">
+                                            <span class="carousel-control-next-icon"></span>
+                                        </a>
+
+                                        <!-- Thumbnails -->
+                                        <ol class="carousel-indicators list-inline">
+                                            @foreach($category->images as $image)
+                                                <li class="list-inline-item active">
+                                                    <a id="carousel-selector-0" class="selected" data-slide-to="0"
+                                                       data-target="#custCarousel">
+                                                        <img style="width: 100px;height: 50px" src="/images/vibe_category/{{$image->image}}" class="img-fluid">
+                                                    </a>
+                                                </li>
+                                            @endforeach
+
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @elseif($category->images->count()==1)
+                        <img style="width:700px;height: 400px" src="/images/vibe_category/{{$category->images[0]->image}}">
+                    @endif
+                    <section class="mb-5">
+                        <p>Ulpoaded by <a href="/user-profile/{{$category->user_id}}">{{$category->user->name}}</a></p>
+                        <hr>
+                        <p class="fs-5 mb-4">{{$category->description}}</p>
+
+                    </section>
+                </article>
+                <!-- Comments section-->
                 <section class="mb-5">
-                    <p class="fs-5 mb-4">Science is an enterprise that should be cherished as an activity of the free human mind. Because it transforms who we are, how we live, and it gives us an understanding of our place in the universe.</p>
-                    <p class="fs-5 mb-4">The universe is large and old, and the ingredients for life as we know it are everywhere, so there's no reason to think that Earth would be unique in that regard. Whether of not the life became intelligent is a different question, and we'll see if we find that.</p>
-                    <p class="fs-5 mb-4">If you get asteroids about a kilometer in size, those are large enough and carry enough energy into our system to disrupt transportation, communication, the food chains, and that can be a really bad day on Earth.</p>
-                    <h2 class="fw-bolder mb-4 mt-5">I have odd cosmic thoughts every day</h2>
-                    <p class="fs-5 mb-4">For me, the most fascinating interface is Twitter. I have odd cosmic thoughts every day and I realized I could hold them to myself or share them with people who might be interested.</p>
-                    <p class="fs-5 mb-4">Venus has a runaway greenhouse effect. I kind of want to know what happened there because we're twirling knobs here on Earth without knowing the consequences of it. Mars once had running water. It's bone dry today. Something bad happened there as well.</p>
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <!-- Comment form-->
+                            <form class="mb-4"><textarea class="form-control" rows="3"
+                                                         placeholder="Join the discussion and leave a comment!"></textarea>
+                            </form>
+                            <!-- Comment with nested comments-->
+                            <div class="d-flex mb-4">
+                                <!-- Parent comment-->
+                                <div class="flex-shrink-0"><img class="rounded-circle"
+                                                                src="https://dummyimage.com/50x50/ced4da/6c757d.jpg"
+                                                                alt="..."/></div>
+                                <div class="ms-3">
+                                    <div class="fw-bold">Commenter Name</div>
+                                    If you're going to lead a space frontier, it has to be government; it'll never be
+                                    private enterprise. Because the space frontier is dangerous, and it's expensive, and
+                                    it has unquantified risks.
+                                    <!-- Child comment 1-->
+                                    <div class="d-flex mt-4">
+                                        <div class="flex-shrink-0"><img class="rounded-circle"
+                                                                        src="https://dummyimage.com/50x50/ced4da/6c757d.jpg"
+                                                                        alt="..."/></div>
+                                        <div class="ms-3">
+                                            <div class="fw-bold">Commenter Name</div>
+                                            And under those conditions, you cannot establish a capital-market evaluation
+                                            of that enterprise. You can't get investors.
+                                        </div>
+                                    </div>
+                                    <!-- Child comment 2-->
+                                    <div class="d-flex mt-4">
+                                        <div class="flex-shrink-0"><img class="rounded-circle"
+                                                                        src="https://dummyimage.com/50x50/ced4da/6c757d.jpg"
+                                                                        alt="..."/></div>
+                                        <div class="ms-3">
+                                            <div class="fw-bold">Commenter Name</div>
+                                            When you put money directly to a problem, it makes a good headline.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Single comment-->
+                            <div class="d-flex">
+                                <div class="flex-shrink-0"><img class="rounded-circle"
+                                                                src="https://dummyimage.com/50x50/ced4da/6c757d.jpg"
+                                                                alt="..."/></div>
+                                <div class="ms-3">
+                                    <div class="fw-bold">Commenter Name</div>
+                                    When I look at the universe and all the ways the universe wants to kill us, I find
+                                    it hard to reconcile that with statements of beneficence.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </section>
-            </article>
-            <!-- Comments section-->
-            <section class="mb-5">
-                <div class="card bg-light">
+            </div>
+            <!-- Side widgets-->
+            <div class="col-lg-4">
+                <!-- Search widget-->
+
+                <!-- Categories widget-->
+                <div class="card mb-4">
+                    <div class="card-header">Related categories</div>
                     <div class="card-body">
-                        <!-- Comment form-->
-                        <form class="mb-4"><textarea class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea></form>
-                        <!-- Comment with nested comments-->
-                        <div class="d-flex mb-4">
-                            <!-- Parent comment-->
-                            <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                            <div class="ms-3">
-                                <div class="fw-bold">Commenter Name</div>
-                                If you're going to lead a space frontier, it has to be government; it'll never be private enterprise. Because the space frontier is dangerous, and it's expensive, and it has unquantified risks.
-                                <!-- Child comment 1-->
-                                <div class="d-flex mt-4">
-                                    <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                                    <div class="ms-3">
-                                        <div class="fw-bold">Commenter Name</div>
-                                        And under those conditions, you cannot establish a capital-market evaluation of that enterprise. You can't get investors.
+                        <div class="row">
+                            <?php $counter=1; ?>
+                            @foreach($related_categories as $item)
+                                @if($counter%2==0)
+                                    <div class="col-sm-6">
+
+                                        <ul class="list-unstyled mb-0">
+
+                                                <li><a href="/vibe/{{$item->category->id}}">{{$item->category->name}}</a></li>
+
+                                        </ul>
                                     </div>
-                                </div>
-                                <!-- Child comment 2-->
-                                <div class="d-flex mt-4">
-                                    <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                                    <div class="ms-3">
-                                        <div class="fw-bold">Commenter Name</div>
-                                        When you put money directly to a problem, it makes a good headline.
+                                @else
+                                    <div class="col-sm-6">
+                                        <ul class="list-unstyled mb-0">
+                                            <li><a href="/vibe/{{$item->category->id}}">{{$item->category->name}}</a></li>
+                                        </ul>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Single comment-->
-                        <div class="d-flex">
-                            <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                            <div class="ms-3">
-                                <div class="fw-bold">Commenter Name</div>
-                                When I look at the universe and all the ways the universe wants to kill us, I find it hard to reconcile that with statements of beneficence.
-                            </div>
+                                @endif
+                                <?php $counter++?>
+                            @endforeach
+
                         </div>
                     </div>
                 </div>
-            </section>
-        </div>
-        <!-- Side widgets-->
-        <div class="col-lg-4">
-            <!-- Search widget-->
-            <div class="card mb-4">
-                <div class="card-header">Search</div>
-                <div class="card-body">
-                    <div class="input-group">
-                        <input class="form-control" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
-                        <button class="btn btn-primary" id="button-search" type="button">Go!</button>
+                <!-- Side widget-->
+                <div class="card mb-4">
+                    <div class="card-header">Side Widget</div>
+                    <div class="card-body">You can put anything you want inside of these side widgets. They are easy to
+                        use, and feature the Bootstrap 5 card component!
                     </div>
                 </div>
-            </div>
-            <!-- Categories widget-->
-            <div class="card mb-4">
-                <div class="card-header">Categories</div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <ul class="list-unstyled mb-0">
-                                <li><a href="#!">Web Design</a></li>
-                                <li><a href="#!">HTML</a></li>
-                                <li><a href="#!">Freebies</a></li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6">
-                            <ul class="list-unstyled mb-0">
-                                <li><a href="#!">JavaScript</a></li>
-                                <li><a href="#!">CSS</a></li>
-                                <li><a href="#!">Tutorials</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Side widget-->
-            <div class="card mb-4">
-                <div class="card-header">Side Widget</div>
-                <div class="card-body">You can put anything you want inside of these side widgets. They are easy to use, and feature the Bootstrap 5 card component!</div>
             </div>
         </div>
     </div>
-</div>
 @stop
 @section('script')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
