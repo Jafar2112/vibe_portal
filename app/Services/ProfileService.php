@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\UserFollow;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -53,5 +54,21 @@ class ProfileService
     public function other_information($request)
     {
 
+    }
+    public function follow_or_unfollow($id)
+    {
+        $follow = UserFollow::where([
+            'follower_id'=>Auth::id(),
+            'following_id'=>$id
+        ])->first();
+        if ($follow){
+            $follow->delete();
+        }
+        else{
+            UserFollow::create([
+                'follower_id'=>Auth::id(),
+                'following_id'=>$id
+            ]);
+        }
     }
 }

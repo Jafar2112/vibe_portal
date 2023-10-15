@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use function Symfony\Component\Translation\t;
 
 class User extends Authenticatable
 {
@@ -66,6 +67,14 @@ class User extends Authenticatable
     }
     public function follower()
     {
-        return $this->belongsToMany(User::class,'user_follow');
+        return $this->belongsToMany(User::class,'user_follow','following_id','follower_id');
+    }
+    public function following()
+    {
+        return $this->belongsToMany(User::class,'user_follow','follower_id','following_id');
+    }
+    public function following_categories()
+    {
+        return $this->belongsToMany(VibeCategory::class,'user_follow_categories','user_id','category_id');
     }
 }

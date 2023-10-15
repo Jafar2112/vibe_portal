@@ -51,4 +51,6 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/other-information',[ProfileController::class,'other_information']);
     });
+    Route::post('/follow_or_unfollow/{id}',[ProfileController::class,'follow_or_unfollow']);
+    Route::get('/user/home',[\App\Http\Controllers\User\UserHomeController::class,'home']);
 });

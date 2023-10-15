@@ -57,4 +57,8 @@ class ProfileController extends Controller
     {
         $this->profileService->other_information($request);
     }
+    public function follow_or_unfollow($id)
+    {
+        $this->profileService->follow_or_unfollow($id);
+    }
 }

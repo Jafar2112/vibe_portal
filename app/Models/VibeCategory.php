@@ -22,9 +22,9 @@ class VibeCategory extends Model
         return $this->belongsToMany(VibeCategory::class,'vibe_categories_related_categories');
     }
 
-    public function post()
+    public function posts()
     {
-        return $this->belongsToMany(Post::class, 'posts_categories');
+        return $this->belongsToMany(Post::class, 'posts_categories','category_id','post_id');
     }
 
     public function images()
