@@ -27,5 +27,13 @@ class Post extends Model
     {
         return $this->belongsToMany(VibeCategory::class,'posts_categories');
     }
+    public static function user_id($id)
+    {
+        return Post::where('user_id',$id);
+    }
+    public function comments()
+    {
+        return $this->morphMany(Comment::class,'commentable');
+    }
 
 }

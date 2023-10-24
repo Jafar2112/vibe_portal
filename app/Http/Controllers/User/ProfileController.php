@@ -4,7 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Services\ProfileService;
+use App\Services\Users\ProfileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,7 +21,14 @@ class ProfileController extends Controller
     {
         $user = User::findOrFail($id);
         $posts = $user->posts()->orderBy('id', 'desc')->get();
-        return view('user.user-profile', compact('user', 'posts'));
+        return view('user.user-profile.user-profile'
+            , compact('user', 'posts'));
+    }
+
+    public function about($id)
+    {
+        $user = User::findOrFail($id);
+        return view('user.user-profile.about',compact('user'));
     }
 
     public function edit()

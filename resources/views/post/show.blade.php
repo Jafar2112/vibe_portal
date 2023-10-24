@@ -46,17 +46,21 @@
                                 <h3>{{$post->title}}</h3>
                                 <ul class="post-meta list-inline">
                                     <li class="list-inline-item">
-                                        <i class="fa fa-user-circle-o"></i> <a style="color: black"
-                                                                               href="#">{{$post->user->name}}</a>
+                                        <i style="font-size: 40px;" class="fa fa-thumbs-up"></i>
                                     </li>
+                                    <li class="list-inline-item">
+                                        <i class="fas fa-bookmark"></i>
+                                    </li>
+
                                     <li class="list-inline-item">
                                         <i class="fa fa-calendar-o"></i> {{$post->created_at->format('d-m-Y')}}
                                     </li>
                                     <li class="list-inline-item">
                                         <i class="fa fa-tags"></i> <a href="#">Bootstrap4</a>
                                     </li>
+
                                 </ul>
-                                <p>{{$post->content}}</p>
+                                <p>{{nl2br(e($post->content))}}</p>
                                 <ul class="list-inline share-buttons">
                                     <li class="list-inline-item">Share Post:</li>
                                     <li class="list-inline-item">
@@ -79,74 +83,51 @@
                                     </li>
                                 </ul>
                                 <hr class="mb40">
-                                <h4 class="mb40 text-uppercase font500">About Author</h4>
-                                <div class="media mb40">
-                                    <i class="d-flex mr-3 fa fa-user-circle fa-5x text-primary"></i>
-                                    <div class="media-body">
-                                        <h5 class="mt-0 font700">Jane Doe</h5> Cras sit amet nibh libero, in gravida
-                                        nulla.
-                                        Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in
-                                        vulputate
-                                        at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla.
-                                        Donec
-                                        lacinia congue felis in faucibus.
-                                    </div>
-                                </div>
+                                <h4 style="font-size: 15px;" class="mb40 text-uppercase font500">Author</h4>
+
+                                <img style="width: 70px;height: 70px; margin: 20px; border-radius: 50%;"
+                                     src="/images/profile_photos/{{$post->user->profile_photo}}">
+
+                                <a href="/profile/{{$post->user->id}}"><span
+                                        style="font-size: 20px">{{$post->user->name}}</span></a>
                                 <hr class="mb40">
                                 <h4 class="mb40 text-uppercase font500">Comments</h4>
-                                <div class="media mb40">
-                                    <i class="d-flex mr-3 fa fa-user-circle-o fa-3x"></i>
-                                    <div class="media-body">
-                                        <h5 class="mt-0 font400 clearfix">
-                                            <a href="#" class="float-right">Reply</a>
-                                            Jane Doe</h5> Nulla vel metus scelerisque ante sollicitudin. Cras purus
-                                        odio,
-                                        vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac
-                                        nisi
-                                        vulputate fringilla. Donec lacinia congue felis in faucibus.
+                                @foreach($post->comments()->orderBy('id','desc')->get() as $comment)
+                                    <div class="media mb40">
+                                        <img style="width: 50px; height: 50px; margin: 20px; border-radius: 50%;" src="/images/profile_photos/{{$post->user->profile_photo}}">
+                                        <div class="media-body">
+                                            <h5 class="mt-0 font400 clearfix">
+                                                <a href="/profile/{{$comment->user->id}}">{{$comment->user->name}}</a>
+                                                <div class="dropdown float-right">
+                                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="optionsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        ...
+                                                    </button>
+                                                    <div class="dropdown-menu" aria-labelledby="optionsDropdown">
+                                                        <a class="dropdown-item" href="#" data-comment-id="{{$comment->id}}" onclick="editComment(this)">Edit</a>
+                                                        <a class="dropdown-item" href="#" data-comment-id="{{$comment->id}}" onclick="deleteComment(this)">Delete</a>
+                                                        <a class="dropdown-item" href="#" data-comment-id="{{$comment->id}}" onclick="reportComment(this)">Report</a>
+                                                    </div>
+                                                </div>
+                                            </h5>
+                                            {!! nl2br(e($comment->body)) !!}
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="media mb40">
-                                    <i class="d-flex mr-3 fa fa-user-circle-o fa-3x"></i>
-                                    <div class="media-body">
-                                        <h5 class="mt-0 font400 clearfix">
-                                            <a href="#" class="float-right">Reply</a>
-                                            Jane Doe</h5> Nulla vel metus scelerisque ante sollicitudin. Cras purus
-                                        odio,
-                                        vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac
-                                        nisi
-                                        vulputate fringilla. Donec lacinia congue felis in faucibus.
-                                    </div>
-                                </div>
-                                <div class="media mb40">
-                                    <i class="d-flex mr-3 fa fa-user-circle-o fa-3x"></i>
-                                    <div class="media-body">
-                                        <h5 class="mt-0 font400 clearfix">
-                                            <a href="#" class="float-right">Reply</a>
-                                            Jane Doe</h5> Nulla vel metus scelerisque ante sollicitudin. Cras purus
-                                        odio,
-                                        vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac
-                                        nisi
-                                        vulputate fringilla. Donec lacinia congue felis in faucibus.
-                                    </div>
-                                </div>
+
+
+                                @endforeach
                                 <hr class="mb40">
                                 <h4 class="mb40 text-uppercase font500">Post a comment</h4>
-                                <form role="form">
-                                    <div class="form-group">
-                                        <label>Name</label>
-                                        <input type="text" class="form-control" placeholder="John Doe">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Email</label>
-                                        <input type="email" class="form-control" placeholder="john@doe.com">
-                                    </div>
+                                <form method="post" action="/comment-post/{{$post->id}}">
+                                    @csrf
                                     <div class="form-group">
                                         <label>Comment</label>
-                                        <textarea class="form-control" rows="5" placeholder="Comment"></textarea>
+
+
+                                        <textarea name="body" class="form-control" rows="5" placeholder=""></textarea>
+
                                     </div>
                                     <div class="clearfix float-right">
-                                        <button type="button" class="btn btn-primary btn-lg">Submit</button>
+                                        <button type="submit" class="btn btn-primary btn-lg">Submit</button>
                                     </div>
                                 </form>
                             </div>
@@ -161,7 +142,7 @@
                     <h4 class="sidebar-title">Categories</h4>
                     <ul class="list-unstyled categories">
                         @foreach($categories as $category)
-                            <li><a href="">{{$category->category->name}}</a></li>
+                            <li><a href="/vibe/{{$category->category->id}}">{{$category->category->name}}</a></li>
                         @endforeach
                     </ul>
                 </div>
@@ -198,4 +179,21 @@
             </div>
         </div>
     </div>
+    <script>
+        function editComment(element) {
+            var commentId = element.getAttribute("data-comment-id");
+            // Burada düzenleme işlemi için gerekli kodu ekleyin
+        }
+
+        function deleteComment(element) {
+            var commentId = element.getAttribute("data-comment-id");
+            // Burada silme işlemi için gerekli kodu ekleyin
+        }
+
+        function reportComment(element) {
+            var commentId = element.getAttribute("data-comment-id");
+            // Burada rapor işlemi için gerekli kodu ekleyin
+        }
+
+    </script>
 @endsection

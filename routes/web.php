@@ -10,7 +10,11 @@ Route::get('/', [PageController::class, 'home']);
 Route::view('view','vibe.vibe');
 Route::get('/vibe/{id}',[VibeController::class,'show']);
 Route::get('/post/{id}',[PostController::class,'show']);
+
 Route::get('/profile/{id}',[ProfileController::class,'show']);
+Route::get('/profile/about/{id}',[ProfileController::class,'about']);
+
+Route::post('/like-post/{id}',[]);
 
 Route::middleware([
     'auth:sanctum',

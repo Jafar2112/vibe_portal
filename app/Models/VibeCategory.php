@@ -31,4 +31,8 @@ class VibeCategory extends Model
     {
         return $this->hasMany(VibeCategoryImages::class, 'category_id', 'id');
     }
+    public function comments()
+    {
+        return $this->morphMany(Comment::class,'commentable');
+    }
 }

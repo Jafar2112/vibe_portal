@@ -77,4 +77,8 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(VibeCategory::class,'user_follow_categories','user_id','category_id');
     }
+    public function likes()
+    {
+        return $this->hasMany(Like::class,'user_id','id');
+    }
 }

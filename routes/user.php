@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\Post\PostCreate;
 use \App\Http\Controllers\VibeCategory\VibeCategoryCreate;
 use \App\Http\Controllers\User\ProfileController;
+use \App\Http\Controllers\User\UserHomeController;
+use \App\Http\Controllers\User\PostController;
 
 Route::group(['middleware' => 'auth'], function () {
 
@@ -52,5 +54,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/other-information',[ProfileController::class,'other_information']);
     });
     Route::post('/follow_or_unfollow/{id}',[ProfileController::class,'follow_or_unfollow']);
-    Route::get('/user/home',[\App\Http\Controllers\User\UserHomeController::class,'home']);
+    Route::get('/user/home',[UserHomeController::class,'home']);
+
+
+    Route::post('/comment-post/{id}',[PostController::class,'create_comment']);
 });

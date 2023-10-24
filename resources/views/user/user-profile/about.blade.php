@@ -44,22 +44,22 @@
                                                 </a>
                                             @endif
                                         @endif
-                                            @if($user->id==Auth::id())
-                                                <div class="d-none d-md-block">
-                                                    <button class="btn btn-primary btn-icon-text btn-edit-profile">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                                             stroke-linecap="round" stroke-linejoin="round"
-                                                             class="feather feather-edit btn-icon-prepend">
-                                                            <path
-                                                                d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                                            <path
-                                                                d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                                        </svg>
-                                                        Edit profile
-                                                    </button>
-                                                </div>
-                                            @endif
+                                        @if($user->id==Auth::id())
+                                            <div class="d-none d-md-block">
+                                                <button class="btn btn-primary btn-icon-text btn-edit-profile">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                         stroke-linecap="round" stroke-linejoin="round"
+                                                         class="feather feather-edit btn-icon-prepend">
+                                                        <path
+                                                            d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                                        <path
+                                                            d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                                    </svg>
+                                                    Edit profile
+                                                </button>
+                                            </div>
+                                        @endif
 
                                     </div>
                                 </div>
@@ -499,7 +499,6 @@
                         @endforeach
                     </div>
                 </div>
-
                 <!-- middle wrapper end -->
                 <!-- right wrapper start -->
                 <div class="d-none d-xl-block col-xl-3 right-wrapper">
@@ -726,42 +725,44 @@
     </div>
 @endsection
 @section('scripts')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $('button').click(function () {
-            $(this).text(function (_, text) {
-                return text === "Follow" ? "Unfollow" : "Follow";
+    @if(Auth::check())
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $('button').click(function () {
+                $(this).text(function (_, text) {
+                    return text === "Follow" ? "Unfollow" : "Follow";
+                });
+                if ($(this).text() == "Follow") {
+                    $(this).removeClass('unfollow');
+                } else if ($(this).text() == "Unfollow") {
+                    $(this).addClass('unfollow');
+                }
             });
-            if ($(this).text() == "Follow") {
-                $(this).removeClass('unfollow');
-            } else if ($(this).text() == "Unfollow") {
-                $(this).addClass('unfollow');
-            }
-        });
 
 
-        $(document).ready(function () {
-            $("#follow_or_unfollow_form").submit(function (e) {
-                e.preventDefault();
-                var form = $(this);
+            $(document).ready(function () {
+                $("#follow_or_unfollow_form").submit(function (e) {
+                    e.preventDefault();
+                    var form = $(this);
 
-                $.ajax({
-                    url: form.attr("action"),
-                    method: "POST",
-                    data: form.serialize(),
-                    success: function (response) {
+                    $.ajax({
+                        url: form.attr("action"),
+                        method: "POST",
+                        data: form.serialize(),
+                        success: function (response) {
 
-                        console.log("AJAX request successful");
-                        console.log(response);
-                    },
-                    error: function (error) {
+                            console.log("AJAX request successful");
+                            console.log(response);
+                        },
+                        error: function (error) {
 
-                        console.log("AJAX request failed");
-                        console.log(error);
-                    }
+                            console.log("AJAX request failed");
+                            console.log(error);
+                        }
+                    });
                 });
             });
-        });
-    </script>
+        </script>
+    @endif
 
 @endsection
