@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\VibeCategory;
 use Illuminate\Support\Facades\Auth;
 
 class UserHomeController extends Controller
@@ -12,34 +13,20 @@ class UserHomeController extends Controller
     public function home()
     {
         $user = Auth::user();
-        $following_users = $user->following;
-        $user_posts = [];
 
+        $following_user_ids = $user->following->pluck('id')->toArray();
+        $following_categories = $user->following_categories->pluck('id')->toArray();
+        $posts = Post::query()
+            ->with(['user', 'images', 'category'])
+            ->orderBy('id', 'desc')
+            ->whereHas('user', function ($query) use ($following_user_ids,$user) {
+                $query->where('user_id', $following_user_ids);
 
+            })->orWhereHas('category', function ($query) use ($following_categories) {
+                $query->where('category_id', $following_categories);
 
-        foreach ($following_users as $user) {
+            })->get();
 
-            $posts = Post::user_id($user->id)->get();
-
-            foreach ($posts as $post) {
-
-                if (empty($post->images)) {
-                    $image =null;
-                }
-                $data = [
-                    'title' => $post->title,
-                    'content' => $post->content,
-                    'image' => $image,
-                ];
-            }
-
-            array_push($user_posts, $data);
-        }
-        dd($user_posts);
-//        $category_posts = $user->following_categories()->posts()->orderBy('created_at','desc')->get();
-//        $following_user_posts = $user->following()->posts()->orderBy('created_at', 'desc')->get();
-
-
-        return view('user.home', compact('user_posts'));
+        return view('user.home', compact('posts'));
     }
 }

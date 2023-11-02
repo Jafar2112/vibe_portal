@@ -8,86 +8,52 @@
     <div class="container bootstrap snippets bootdey">
         <di class="col-md-8">
             <div class="col-sm-12">
-                @foreach($user_posts as $post)
+                @foreach($posts   as $post)
                     <div class="panel panel-white post panel-shadow">
                         <div class="post-heading">
                             <div class="pull-left image">
-                                <img src="https://bootdey.com/img/Content/user_1.jpg" class="img-circle avatar"
+                                <img src="/images/profile_photos/{{$post->user->profile_photo}}"
+                                     class="img-circle avatar"
                                      alt="user profile image">
                             </div>
                             <div class="pull-left meta">
                                 <div class="title h5">
-                                    <a href="#"><b>Brian cartelly</b></a>
-                                    uploaded a photo.
+                                    <a href="/profile/{{$post->user->id}}"><b>{{$post->user->name}}</b></a>
+                                    uploaded a post.
                                 </div>
-                                <h6 class="text-muted time">5 seconds ago</h6>
+                                <h6 class="text-muted time">{{$post->created_at->format('d-m-Y')}}</h6>
                             </div>
                         </div>
                         <div class="post-image">
-                            <img src="https://www.bootdey.com/image/400x200/FFB6C1/000000" class="image"
-                                 alt="image post">
+                            @if(!$post->images->isEmpty())
+                                <a href="/post/{{$post->id}}">
+                                    <img style="max-height: 500px" src="/images/post/{{$post->images[0]->image}}"
+                                         class="image"
+                                         alt="image post">
+                                </a>
+                            @endif
                         </div>
                         <div class="post-description">
-                            <h4>Foto title</h4>
-                            <p>Put here your foto description</p>
+                            <h4><a style="color: black" href="/post/{{$post->id}}">{!! Str::limit($post->title,75) !!}</a>
+                            </h4>
+                            <p>
+                                {!! nl2br(e(Str::limit($post->content,400))) !!}
+                                @if(strlen($post->content)>=400)
+                                    <a href="/post/{{$post->id}}">Read more</a>
+                                @endif
+                            </p>
                             <div class="stats">
-                                <a href="#" class="btn btn-default stat-item">
-                                    <i class="fa fa-thumbs-up icon"></i>228
-                                </a>
-                                <a href="#" class="btn btn-default stat-item">
-                                    <i class="fa fa-share icon"></i>128
-                                </a>
+                                @foreach($post->category->take(30) as $category)
+                                    <a href="/vibe/{{$category->id}}"><span
+                                            class="badge badge-dark">{{$category->name}}</span></a>
+
+                                @endforeach
+                                @if($post->category->count()>=2)
+                                    <span style="font-size: 14px">And more</span>
+                                @endif
                             </div>
                         </div>
-                        <div class="post-footer">
-                            <div class="input-group">
-                                <input class="form-control" placeholder="Add a comment" type="text">
-                                <span class="input-group-addon">
-                            <a href="#"><i class="fa fa-edit"></i></a>
-                        </span>
-                            </div>
-                            <ul class="comments-list">
-                                <li class="comment">
-                                    <a class="pull-left" href="#">
-                                        <img class="avatar" src="https://bootdey.com/img/Content/user_3.jpg"
-                                             alt="avatar">
-                                    </a>
-                                    <div class="comment-body">
-                                        <div class="comment-heading">
-                                            <h4 class="user">Full name 1</h4>
-                                            <h5 class="time">7 minutes ago</h5>
-                                        </div>
-                                        <p>This is a comment bla bla bla</p>
-                                    </div>
-                                </li>
-                                <li class="comment">
-                                    <a class="pull-left" href="#">
-                                        <img class="avatar" src="https://bootdey.com/img/Content/user_2.jpg"
-                                             alt="avatar">
-                                    </a>
-                                    <div class="comment-body">
-                                        <div class="comment-heading">
-                                            <h4 class="user">Full name 2</h4>
-                                            <h5 class="time">3 minutes ago</h5>
-                                        </div>
-                                        <p>This is another comment bla bla bla</p>
-                                    </div>
-                                </li>
-                                <li class="comment">
-                                    <a class="pull-left" href="#">
-                                        <img class="avatar" src="https://bootdey.com/img/Content/user_3.jpg"
-                                             alt="avatar">
-                                    </a>
-                                    <div class="comment-body">
-                                        <div class="comment-heading">
-                                            <h4 class="user">Full name 1</h4>
-                                            <h5 class="time">10 seconds ago</h5>
-                                        </div>
-                                        <p>Wow! This is a comment</p>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+
                     </div>
                 @endforeach
             </div>

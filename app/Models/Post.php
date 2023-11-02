@@ -25,7 +25,7 @@ class Post extends Model
     }
     public function category()
     {
-        return $this->belongsToMany(VibeCategory::class,'posts_categories');
+        return $this->belongsToMany(VibeCategory::class,'posts_categories','post_id','category_id');
     }
     public static function user_id($id)
     {

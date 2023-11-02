@@ -1,48 +1,64 @@
 @extends('layouts.main-layout')
 @section('head')
     <link rel="stylesheet" href="/css/post/show.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.js"></script>
 @endsection
 @section('content')
     <style>
-        body{
-            margin:0;
-            padding:0;
+        body {
+            margin: 0;
+            padding: 0;
         }
+
         /* .container{
             width:90%
             margin:10px auto;
         } */
-        .portfolio-menu{
-            text-align:center;
-        }
-        .portfolio-menu ul li{
-            display:inline-block;
-            margin:0;
-            list-style:none;
-            padding:10px 15px;
-            cursor:pointer;
-            -webkit-transition:all 05s ease;
-            -moz-transition:all 05s ease;
-            -ms-transition:all 05s ease;
-            -o-transition:all 05s ease;
-            transition:all .5s ease;
+        .portfolio-menu {
+            text-align: center;
         }
 
-        .portfolio-item{
+        .portfolio-menu ul li {
+            display: inline-block;
+            margin: 0;
+            list-style: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            -webkit-transition: all 05s ease;
+            -moz-transition: all 05s ease;
+            -ms-transition: all 05s ease;
+            -o-transition: all 05s ease;
+            transition: all .5s ease;
+        }
+
+        .portfolio-item {
             /*width:100%;*/
         }
-        .portfolio-item .item{
+
+        .portfolio-item .item {
             /*width:303px;*/
-            float:left;
-            margin-bottom:10px;
+            float: left;
+            margin-bottom: 10px;
+        }
+        #likeButton {
+            background-color: #1877F2;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
         }
 
+        #likeCount {
+            font-size: 18px;
+            margin-top: 10px;
+        }
     </style>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
@@ -52,105 +68,122 @@
                 <article>
 
                     <div class="post-content">
-                            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
 
 
-                                <h3>{{$post->title}}</h3>
+                            <h3>{{$post->title}}</h3>
+                            <hr>
+                            @if(!$post->images->isEmpty())
+                                <img src="/images/post/{{$post->images[0]->image}}" class="img-fluid"
+                                     alt="Responsive image">
+                            @endif
+                            <hr>
+                            <p>{!! nl2br(e($post->content))!!}</p>
+                            <ul class="list-inline share-buttons">
+                                <li class="list-inline-item">Date: <i
+                                        class="fa fa-calendar-o"></i> {{$post->created_at->format('d-m-Y')}}</li>
+                                <li class="list-inline-item">
+                                    <a href="#" class="social-icon-sm si-dark si-colored-facebook si-gray-round">
+                                        <i class="fa fa-facebook"></i>
+                                        <i class="fa fa-facebook"></i>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#" class="social-icon-sm si-dark si-colored-twitter si-gray-round">
+                                        <i class="fa fa-twitter"></i>
+                                        <i class="fa fa-twitter"></i>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="#" class="social-icon-sm si-dark si-colored-linkedin si-gray-round">
+                                        <i class="fa fa-linkedin"></i>
+                                        <i class="fa fa-linkedin"></i>
+                                    </a>
+                                </li>
+                            </ul>
 
-                                <p>{!! nl2br(e($post->content))!!}</p>
-                                <ul class="list-inline share-buttons">
-                                    <li class="list-inline-item">Date:  <i class="fa fa-calendar-o"></i> {{$post->created_at->format('d-m-Y')}}</li>
-                                    <li class="list-inline-item">
-                                        <a href="#" class="social-icon-sm si-dark si-colored-facebook si-gray-round">
-                                            <i class="fa fa-facebook"></i>
-                                            <i class="fa fa-facebook"></i>
-                                        </a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a href="#" class="social-icon-sm si-dark si-colored-twitter si-gray-round">
-                                            <i class="fa fa-twitter"></i>
-                                            <i class="fa fa-twitter"></i>
-                                        </a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a href="#" class="social-icon-sm si-dark si-colored-linkedin si-gray-round">
-                                            <i class="fa fa-linkedin"></i>
-                                            <i class="fa fa-linkedin"></i>
-                                        </a>
-                                    </li>
-                                </ul>
+                            {{--    Gallery Start--}}
+                            <div class="container">
+                                <h4 style="text-align: center">Gallery</h4>
+                                <div class="portfolio-item row">
+                                    @foreach($post->images as $key=>$image)
+                                        <div class="item selfie col-lg-3 col-md-4 col-6 col-sm">
+                                            <a href="/images/post/{{$image->image}}" class="fancylight popup-btn"
+                                               data-fancybox-group="light">
+                                                <img class="img-fluid" src="/images/post/{{$image->image}}" alt="">
+                                            </a>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <ul class="post-meta list-inline">
+                                <li class="list-inline-item">
+                                    <form method="post" action="/like-post/{{$post->id}}">
+                                        @csrf
+                                        <button id="likeButton" >
+                                            <i @if(Auth::user()->likes->contains($post->id)) style="color: #2cdd9b;" @endif class="fas fa-thumbs-up"></i>
+                                            Like</button>
+                                    </form>
+                                </li>
+                                <li class="list-inline-item">
+                                    <i class="fa fa-tags"></i> <a href="#">Bootstrap4</a>
+                                </li>
 
-                                {{--    Gallery Start--}}
-                                <div class="container">
+                            </ul>
+                            <hr class="mb40">
+                            <h4 style="font-size: 15px;" class="mb40 text-uppercase font500">Author</h4>
 
-                                    <div class="portfolio-item row">
-                                        @foreach($post->images as $key=>$image)
-                                            <div class="item selfie col-lg-3 col-md-4 col-6 col-sm">
-                                                <a href="/images/post/{{$image->image}}" class="fancylight popup-btn" data-fancybox-group="light">
-                                                    <img class="img-fluid" src="/images/post/{{$image->image}}" alt="">
-                                                </a>
+                            <img style="width: 70px;height: 70px; margin: 20px; border-radius: 50%;"
+                                 src="/images/profile_photos/{{$post->user->profile_photo}}">
+
+                            <a href="/profile/{{$post->user->id}}"><span
+                                    style="font-size: 20px">{{$post->user->name}}</span></a>
+                            <hr class="mb40">
+                            <h4 class="mb40 text-uppercase font500">Comments</h4>
+                            @foreach($post->comments()->orderBy('id','desc')->get() as $comment)
+                                <div class="media mb40">
+                                    <img style="width: 50px; height: 50px; margin: 20px; border-radius: 50%;"
+                                         src="/images/profile_photos/{{$post->user->profile_photo}}">
+                                    <div class="media-body">
+                                        <h5 class="">
+                                            <a href="/profile/{{$comment->user->id}}">{{$comment->user->name}}</a>
+                                            <div class="comment-items dropdown float-right">
+                                                <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                        id="optionsDropdown" data-toggle="dropdown" aria-haspopup="true"
+                                                        aria-expanded="false">
+                                                    ...
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="optionsDropdown">
+                                                    <a class="dropdown-item" data-comment-id="{{$comment->id}}"
+                                                       onclick="editComment(this)">Edit</a>
+                                                    <a class="dropdown-item" href="#" data-comment-id="{{$comment->id}}"
+                                                       onclick="deleteComment(this)">Delete</a>
+                                                    <a class="dropdown-item" href="#" data-comment-id="{{$comment->id}}"
+                                                       onclick="reportComment(this)">Report</a>
+                                                </div>
                                             </div>
-                                        @endforeach
+                                        </h5>
+                                        <p id="comment-body-{{$comment->id}}">{!! nl2br(e($comment->body)) !!}</p>
                                     </div>
                                 </div>
-                                <ul class="post-meta list-inline">
-                                    <li class="list-inline-item">
-                                        <i id="like-icon" onclick="like()" style="font-size: 40px;" class="fa fa-thumbs-up"></i>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <i class="fa fa-tags"></i> <a href="#">Bootstrap4</a>
-                                    </li>
 
-                                </ul>
-                                <hr class="mb40">
-                                <h4 style="font-size: 15px;" class="mb40 text-uppercase font500">Author</h4>
-
-                                <img style="width: 70px;height: 70px; margin: 20px; border-radius: 50%;"
-                                     src="/images/profile_photos/{{$post->user->profile_photo}}">
-
-                                <a href="/profile/{{$post->user->id}}"><span
-                                        style="font-size: 20px">{{$post->user->name}}</span></a>
-                                <hr class="mb40">
-                                <h4 class="mb40 text-uppercase font500">Comments</h4>
-                                @foreach($post->comments()->orderBy('id','desc')->get() as $comment)
-                                    <div class="media mb40">
-                                        <img style="width: 50px; height: 50px; margin: 20px; border-radius: 50%;" src="/images/profile_photos/{{$post->user->profile_photo}}">
-                                        <div class="media-body">
-                                            <h5 class="">
-                                                <a href="/profile/{{$comment->user->id}}">{{$comment->user->name}}</a>
-                                                <div class="comment-items dropdown float-right">
-                                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="optionsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        ...
-                                                    </button>
-                                                    <div class="dropdown-menu" aria-labelledby="optionsDropdown">
-                                                        <a class="dropdown-item"  data-comment-id="{{$comment->id}}" onclick="editComment(this)">Edit</a>
-                                                        <a class="dropdown-item" href="#" data-comment-id="{{$comment->id}}" onclick="deleteComment(this)">Delete</a>
-                                                        <a class="dropdown-item" href="#" data-comment-id="{{$comment->id}}" onclick="reportComment(this)">Report</a>
-                                                    </div>
-                                                </div>
-                                            </h5>
-                                            <p id="comment-body-{{$comment->id}}">{!! nl2br(e($comment->body)) !!}</p>
-                                        </div>
-                                    </div>
+                            @endforeach
+                            <hr class="mb40">
+                            <h4 class="mb40 text-uppercase font500">Post a comment</h4>
+                            <form method="post" action="/comment-post/{{$post->id}}">
+                                @csrf
+                                <div class="form-group">
+                                    <label>Comment</label>
 
 
-                                @endforeach
-                                <hr class="mb40">
-                                <h4 class="mb40 text-uppercase font500">Post a comment</h4>
-                                <form method="post" action="/comment-post/{{$post->id}}">
-                                    @csrf
-                                    <div class="form-group">
-                                        <label>Comment</label>
+                                    <textarea name="body" class="form-control" rows="5" placeholder=""></textarea>
 
-
-                                        <textarea name="body" class="form-control" rows="5" placeholder=""></textarea>
-
-                                    </div>
-                                    <div class="clearfix float-right">
-                                        <button type="submit" class="btn btn-primary btn-lg">Submit</button>
-                                    </div>
-                                </form>
-                            </div>
+                                </div>
+                                <div class="clearfix float-right">
+                                    <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                                </div>
+                            </form>
+                        </div>
 
                 </article>
                 <!-- post article-->
@@ -162,64 +195,79 @@
                     <h4 class="sidebar-title">Categories</h4>
                     <ul class="list-unstyled categories">
                         @foreach($categories as $category)
-                            <li><a href="/vibe/{{$category->category->id}}">{{$category->category->name}}</a></li>
+                            <a href="/vibe/{{$category->category->id}}"> <span
+                                    class="badge badge-dark">{{$category->category->name}}</span></a>
                         @endforeach
                     </ul>
                 </div>
                 <!--/col-->
                 <div>
-                    <h4 class="sidebar-title">Latest News</h4>
+                    <h4 class="sidebar-title">Latest Posts</h4>
                     <ul class="list-unstyled">
-                        <li class="media">
-                            <img class="d-flex mr-3 img-fluid" width="64"
-                                 src="https://bootdey.com/img/Content/avatar/avatar1.png"
-                                 alt="Generic placeholder image">
-                            <div class="media-body">
-                                <h5 class="mt-0 mb-1"><a href="#">Lorem ipsum dolor sit amet</a></h5> April 05, 2017
-                            </div>
-                        </li>
-                        <li class="media my-4">
-                            <img class="d-flex mr-3 img-fluid" width="64"
-                                 src="https://bootdey.com/img/Content/avatar/avatar2.png"
-                                 alt="Generic placeholder image">
-                            <div class="media-body">
-                                <h5 class="mt-0 mb-1"><a href="#">Lorem ipsum dolor sit amet</a></h5> Jan 05, 2017
-                            </div>
-                        </li>
-                        <li class="media">
-                            <img class="d-flex mr-3 img-fluid" width="64"
-                                 src="https://bootdey.com/img/Content/avatar/avatar3.png"
-                                 alt="Generic placeholder image">
-                            <div class="media-body">
-                                <h5 class="mt-0 mb-1"><a href="#">Lorem ipsum dolor sit amet</a></h5> March 15, 2017
-                            </div>
-                        </li>
+                        @foreach($other_posts as $post)
+                            <hr>
+                            <li class="media">
+                                    <img class="d-flex mr-3 img-fluid" width="64"
+                                         src="/images/post/{{$post->images[0]->image}}"
+                                         alt="Generic placeholder image">
+                                <div class="media-body">
+                                    <h5 class="mt-0 mb-1"><a href="/post/{{$post->id}}">{{nl2br(e(Str::limit($post->title,70)))}}</a></h5> {{$post->created_at->format('d-M-Y')}}
+                                </div>
+                            </li>
+                        @endforeach
                     </ul>
                 </div>
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script>
         // $('.portfolio-item').isotope({
         //  	itemSelector: '.item',
         //  	layoutMode: 'fitRows'
         //  });
-        $('.portfolio-menu ul li').click(function(){
+
+        $(document).ready(function () {
+            $("likeButton").submit(function (e) {
+                e.preventDefault();
+                var form = $(this);
+
+                $.ajax({
+                    url: form.attr("action"),
+                    method: "POST",
+                    data: form.serialize(),
+                    success: function (response) {
+
+                        console.log("AJAX request successful");
+                        console.log(response);
+                    },
+                    error: function (error) {
+
+                        console.log("AJAX request failed");
+                        console.log(error);
+                    }
+                });
+            });
+        });
+
+
+        $('.portfolio-menu ul li').click(function () {
             $('.portfolio-menu ul li').removeClass('active');
             $(this).addClass('active');
 
             var selector = $(this).attr('data-filter');
             $('.portfolio-item').isotope({
-                filter:selector
+                filter: selector
             });
-            return  false;
+            return false;
         });
-        $(document).ready(function() {
+        $(document).ready(function () {
             var popup_btn = $('.popup-btn');
             popup_btn.magnificPopup({
-                type : 'image',
-                gallery : {
-                    enabled : true
+                type: 'image',
+                gallery: {
+                    enabled: true
                 }
             });
         });

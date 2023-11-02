@@ -6,6 +6,7 @@ use \App\Http\Controllers\VibeCategory\VibeCategoryCreate;
 use \App\Http\Controllers\User\ProfileController;
 use \App\Http\Controllers\User\UserHomeController;
 use \App\Http\Controllers\User\PostController;
+use \App\Http\Controllers\NotificationsController;
 
 Route::group(['middleware' => 'auth'], function () {
 
@@ -41,21 +42,25 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/third-step/{id}', [VibeCategoryCreate::class, 'third_step_post'])
             ->name('vibe.category.create.third.step.post');
     });
-    Route::group(['prefix'=>'/user/profile'],function (){
+    Route::group(['prefix' => '/user/profile'], function () {
 
         Route::get('/edit', [ProfileController::class, 'edit']);
-        Route::put('/update',[ProfileController::class,'update'])
+        Route::put('/update', [ProfileController::class, 'update'])
             ->name('user.profile.edit');
 
-        Route::get('/change-password',[ProfileController::class,'change_password']);
-        Route::put('/change-password',[ProfileController::class,'change_password_post'])
+        Route::get('/change-password', [ProfileController::class, 'change_password']);
+        Route::put('/change-password', [ProfileController::class, 'change_password_post'])
             ->name('user.change.password');
 
-        Route::get('/other-information',[ProfileController::class,'other_information']);
+        Route::get('/other-information', [ProfileController::class, 'other_information']);
     });
-    Route::post('/follow_or_unfollow/{id}',[ProfileController::class,'follow_or_unfollow']);
-    Route::get('/user/home',[UserHomeController::class,'home']);
+    Route::post('/follow_or_unfollow/{id}', [ProfileController::class, 'follow_or_unfollow']);
+    Route::get('/user/home', [UserHomeController::class, 'home']);
 
 
-    Route::post('/comment-post/{id}',[PostController::class,'create_comment']);
+    Route::post('/comment-post/{id}', [PostController::class, 'create_comment']);
+    Route::get('/notifications', [NotificationsController::class, 'index']);
+
+    Route::post('/like-post/{id}',[\App\Http\Controllers\User\PostController::class,'like_or_dislike']);
+
 });

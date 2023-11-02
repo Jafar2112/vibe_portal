@@ -21,8 +21,18 @@ class PostController extends Controller
     public function show($id)
     {
         $post = Post::findOrFail($id);
+
+        $other_posts = Post::query()
+            ->with('images')
+            ->orderBy('id','desc')
+            ->where('id','!=',$post->id)
+            ->has('images')
+            ->take(10)
+            ->get();
+
         $categories = PostCategory::where('post_id',$id)->get();
-        return view('post.show',compact('post','categories'));
+
+        return view('post.show',compact('post','categories','other_posts'));
     }
 
     public function post(Request $request)
