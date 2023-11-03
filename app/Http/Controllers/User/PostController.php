@@ -31,5 +31,10 @@ class PostController extends Controller
         $this->userPostService->create_comment($request, $id);
         return back();
     }
+    public function bookmark($id)
+    {
+        $this->userPostService->bookmark($id);
+        return back();
+    }
 
 }

@@ -54,6 +54,13 @@
             border: none;
             cursor: pointer;
         }
+        #bookmark{
+            background-color: #1877F2;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
 
         #likeCount {
             font-size: 18px;
@@ -118,16 +125,24 @@
                             </div>
                             <ul class="post-meta list-inline">
                                 <li class="list-inline-item">
-                                    <form method="post" action="/like-post/{{$post->id}}">
+                                    <form style="display: inline-block" method="post" action="/like-post/{{$post->id}}">
                                         @csrf
                                         <button id="likeButton" >
-                                            <i @if(Auth::user()->likes->contains($post->id)) style="color: #2cdd9b;" @endif class="fas fa-thumbs-up"></i>
-                                            Like</button>
+                                            <i @if(Auth::check() and Auth::user()->likes->contains($post->id)) style="color: #2cdd9b;" @endif class="fas fa-thumbs-up"></i>
+                                            Like {{$post->likes()->count()}}
+                                        </button>
+
+                                    </form>
+
+                                    <form style="display: inline-block" method="post" action="/bookmark/{{$post->id}}">
+                                        @csrf
+                                        <button id="bookmark" >
+                                            <i @if(Auth::check() and Auth::user()->bookmarks->contains($post->id)) style="color: #2cdd9b;" @endif class="fa-solid fa-bookmark"></i>
+                                            Save
+                                        </button>
                                     </form>
                                 </li>
-                                <li class="list-inline-item">
-                                    <i class="fa fa-tags"></i> <a href="#">Bootstrap4</a>
-                                </li>
+
 
                             </ul>
                             <hr class="mb40">

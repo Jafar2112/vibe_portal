@@ -62,5 +62,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/notifications', [NotificationsController::class, 'index']);
 
     Route::post('/like-post/{id}',[\App\Http\Controllers\User\PostController::class,'like_or_dislike']);
+    Route::post('/bookmark/{id}',[\App\Http\Controllers\User\PostController::class,'bookmark']);
 
 });
