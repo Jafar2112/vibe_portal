@@ -18,7 +18,8 @@
                             </figure>
                             <div class="cover-body d-flex justify-content-between align-items-center">
                                 <div>
-                                    <img style="width: 100px;height: 100px" class="profile-pic" src="/images/profile_photos/{{$user->profile_photo}}"
+                                    <img style="width: 100px;height: 100px" class="profile-pic"
+                                         src="/images/profile_photos/{{$user->profile_photo}}"
                                          alt="profile">
                                     <span class="profile-name">{{$user->name}}</span>
 
@@ -47,18 +48,21 @@
                                         @endif
                                         @if($user->id==Auth::id())
                                             <div class="d-none d-md-block">
-                                                <button class="btn btn-primary btn-icon-text btn-edit-profile">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                                         stroke-linecap="round" stroke-linejoin="round"
-                                                         class="feather feather-edit btn-icon-prepend">
-                                                        <path
-                                                            d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                                        <path
-                                                            d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                                    </svg>
-                                                    Edit profile
-                                                </button>
+                                                <a href="/user/profile/edit">
+                                                    <button class="btn btn-primary btn-icon-text btn-edit-profile">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                             stroke-width="2"
+                                                             stroke-linecap="round" stroke-linejoin="round"
+                                                             class="feather feather-edit btn-icon-prepend">
+                                                            <path
+                                                                d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                                            <path
+                                                                d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                                        </svg>
+                                                        Edit profile
+                                                    </button>
+                                                </a>
                                             </div>
                                         @endif
 
@@ -328,43 +332,6 @@
                                                                                src="/images/post/{{$post->images[0]->image}}"
                                                                                alt=""></a>
                                         </div>
-                                        <div class="card-footer">
-                                            <div class="d-flex post-actions">
-                                                <a href="javascript:;"
-                                                   class="d-flex align-items-center text-muted mr-4">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                         class="feather feather-heart icon-md">
-                                                        <path
-                                                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                                                    </svg>
-                                                    <p class="d-none d-md-block ml-2">Like</p>
-                                                </a>
-                                                <a href="javascript:;"
-                                                   class="d-flex align-items-center text-muted mr-4">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                         class="feather feather-message-square icon-md">
-                                                        <path
-                                                            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                                                    </svg>
-                                                    <p class="d-none d-md-block ml-2">Comment</p>
-                                                </a>
-                                                <a href="javascript:;" class="d-flex align-items-center text-muted">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                         class="feather feather-share icon-md">
-                                                        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
-                                                        <polyline points="16 6 12 2 8 6"></polyline>
-                                                        <line x1="12" y1="2" x2="12" y2="15"></line>
-                                                    </svg>
-                                                    <p class="d-none d-md-block ml-2">Share</p>
-                                                </a>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             @else
@@ -379,7 +346,8 @@
                                                          alt="">
                                                     <div class="ml-2">
                                                         <p style="margin-bottom: 0rem;">{{$user->name}}</p>
-                                                        <p style="margin-bottom: 0rem;" class="tx-11 text-muted">{{$user->created_at->format('d-m-Y')}}</p>
+                                                        <p style="margin-bottom: 0rem;"
+                                                           class="tx-11 text-muted">{{$user->created_at->format('d-m-Y')}}</p>
                                                     </div>
                                                 </div>
                                                 <div class="dropdown">
